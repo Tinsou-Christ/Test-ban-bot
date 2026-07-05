@@ -12,3 +12,5 @@ services:
         value: "8294554523"
       - key: DAILY_LIMIT
         value: "10"
+      - key: PYTHON_VERSION
+        value: "3.12.6"
