@@ -9,6 +9,7 @@ Variables d'environnement attendues :
 """
 
 import os
+import asyncio
 import logging
 from telegram.ext import Application, CommandHandler
 
@@ -23,6 +24,15 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    # Fix de compatibilité : sur certaines versions récentes de Python
+    # (3.14+), il n'existe plus de boucle asyncio créée automatiquement
+    # pour le thread principal. On la crée nous-mêmes explicitement.
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
     token = os.environ.get("BOT_TOKEN")
     if not token:
         raise RuntimeError("La variable d'environnement BOT_TOKEN est manquante.")
